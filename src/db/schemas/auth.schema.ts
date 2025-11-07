@@ -7,12 +7,6 @@ export type AuthDocument = Auth & Document;
 export class Auth {
   @Prop({ required: true, unique: true })
   email: string;
-
-  @Prop({ required: true })
-  username: string;
-
-  @Prop() // Optional
-  age?: number;
 }
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);
