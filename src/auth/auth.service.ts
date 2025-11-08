@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AuthRepository, UsersRepository } from '../db/repositories';
 import { DbService } from '../db/db.service';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly db: DbService,
-  ) {}
+  constructor(private readonly db: DbService) {}
 
   async getHello() {
     await this.db.user.create({

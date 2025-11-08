@@ -1,24 +1,21 @@
+// src/database/repositories/users.repository.ts
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../schemas';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../entities';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   async create(createUserDto: any): Promise<User> {
-    const newUser = new this.userModel(createUserDto);
-    return newUser.save();
+    return this.userRepository.save(createUserDto);
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return this.userRepository.find();
   }
-
-  async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email }).exec();
-  }
-
-  // ... add other methods like findById, update, delete
 }

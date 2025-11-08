@@ -1,24 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Auth, AuthDocument } from '../schemas';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Auth } from '../entities';
 
 @Injectable()
 export class AuthRepository {
-  constructor(@InjectModel(Auth.name) private authModel: Model<AuthDocument>) {}
+  constructor(
+    @InjectRepository(Auth)
+    private readonly authRepository: Repository<Auth>,
+  ) {}
 
   async create(createAuthDto: any): Promise<Auth> {
-    const newUser = new this.authModel(createAuthDto);
-    return newUser.save();
+    return this.authRepository.save(createAuthDto);
   }
 
   async findAll(): Promise<Auth[]> {
-    return this.authModel.find().exec();
+    return this.authRepository.find();
   }
-
-  async findByEmail(email: string): Promise<Auth | null> {
-    return this.authModel.findOne({ email }).exec();
-  }
-
-  // ... add other methods like findById, update, delete
 }
