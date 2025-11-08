@@ -1,20 +1,18 @@
+// src/database/repositories/auth.repository.ts
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Auth } from '../entities';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class AuthRepository {
-  constructor(
-    @InjectRepository(Auth)
-    private readonly authRepository: Repository<Auth>,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create(createAuthDto: any): Promise<Auth> {
-    return this.authRepository.save(createAuthDto);
+  async create(createAuthDto: { email: string }) {
+    return this.prisma.auth.create({
+      data: createAuthDto,
+    });
   }
 
-  async findAll(): Promise<Auth[]> {
-    return this.authRepository.find();
+  async findAll() {
+    return this.prisma.auth.findMany();
   }
 }
