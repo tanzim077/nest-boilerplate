@@ -1,34 +1,25 @@
-// prisma/schema.prisma
-
-// 1. Define your connection
+// This file has your datasource and generator
 datasource db {
-  provider = "postgresql" // or "mysql", "mongodb", etc.
-  url      = env("DATABASE_URL") // Reads from .env
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-// 2. Define the client generator
 generator client {
   provider = "prisma-client-js"
 }
+model Auth {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
 
-// 3. Define your models
+  user User @relation(fields: [email], references: [email])
+}
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String   @unique
   username  String
   age       Int?
   createdAt DateTime @default(now())
 
-  // This creates the relation to the Auth model
   auth Auth?
-}
-
-model Auth {
-  // id        String   @id @default(uuid())
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  createdAt DateTime @default(now())
-
-  // This is the other side of the relation
-  user User @relation(fields: [email], references: [email])
 }

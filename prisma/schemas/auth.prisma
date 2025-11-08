@@ -1,0 +1,7 @@
+model Auth {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [email], references: [email])
+}

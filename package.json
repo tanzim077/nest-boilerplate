@@ -6,6 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prisma:combine": "cat prisma/schemas/*.prisma > prisma/schema.prisma",
+    "prisma:generate": "pnpm run prisma:combine && npx prisma generate",
+    "prisma:migrate": "pnpm run prisma:combine && npx prisma migrate dev",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
